@@ -1,0 +1,36 @@
+{
+
+	"development": {
+
+		"APP_NAME": "TEST API",
+		"DATABASE" : "mongodb://localhost/clearproject",
+		"URL" : "http://127.0.0.1",
+		"PORT" : "8989"
+
+	},
+
+	"production": {
+
+		"APP_NAME": "Prod server",
+		"DATABASE" : "mongodb://localhost/clearproject",
+		"URL" : "https://api.site.com",
+		"PORT" : ""
+
+	},
+
+	"authMail" : {
+
+		"service": "gmail",
+		//		"clientId": '1092986739432-1uj7tdemvt7chfest5ui37jh97n4i5ge.apps.googleusercontent.com',
+		"clientId": '1076296164859-q2u4bdgts6mbi3a81nhuqo3k0b40fcl6.apps.googleusercontent.com',
+		//		"clientSecret": 'ZyNbm4SG2RnDpQ_YXWdTd3w2',
+		"clientSecret": 'L0tZeFQ49I6dhksUnBiVZDEI',
+		//		"refreshToken": '1/_ZFSxEv6CnnbzP_1e6nykHw9yFdvxWqCibwYe7Q_qPk',
+		"refreshToken": '1/sDIK4mUuci3idtEkm37ThIUfoGryOeWl3gGNYztB0qI',
+		//		"user": "testinghankock@gmail.com",
+		"user": "testinghankock1@gmail.com",
+		"pass": "QWerty123"
+
+	}
+
+}

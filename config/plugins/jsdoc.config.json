@@ -1,0 +1,26 @@
+{
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc","closure"]
+  },
+  "source": {
+    "include": [ "client" ],
+    "exclude": ["client/tests"],
+    "includePattern": ".+\\.js(x)?$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "opts": {
+    "template": "node_modules/docdash",
+    "destination": "./documentation/",
+    "private": true,
+    "recurse": true
+  },
+  "plugins": [
+    "jsdoc_plugins/cssmodules.js",
+    "jsdoc_plugins/export.js"
+  ],
+  "templates": {
+    "cleverLinks": false,
+    "monospaceLinks": false
+  }
+}
