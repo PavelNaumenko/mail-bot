@@ -1,4 +1,4 @@
-import { getMailList, createTransport } from '../../config-services/gmail';
+import { getMailList, createTransport, addMail, makeMailReaded } from '../../config-services/gmail';
 import EventEmitter from 'events';
 import fs from 'fs';
 import request from 'request';
@@ -66,9 +66,30 @@ class Mailer {
 
 				setTimeout(() => {
 
-					this.emailTransporter.sendMail(this.configureMessage(options), (error) => {
+					this.emailTransporter.sendMail(this.configureMessage(options), (error, info) => {
 
-						(error) ? this.events.emit('error', error) : this.events.emit('success');
+						if (error) {
+
+							this.events.emit('error', error);
+
+						} else {
+
+							addMail({
+
+								messageId: info.messageId,
+								envelope: info.envelope
+
+							}).then(() => {
+
+								this.events.emit('success');
+								
+							}).catch((err) => {
+
+								this.events.emit('error', err);
+								
+							});
+
+						}
 
 					});
 
@@ -132,13 +153,17 @@ class Mailer {
 		
 		return setInterval(() => {
 
-			let arr = getMailList();
-			
-			arr.forEach((i) => {
+			getMailList()
+				.then((mails) => {
 
-				this.events.emit('message', i);
-				
-			});
+					this.parseMails(mails);
+
+				})
+				.catch((err) => {
+
+					console.log(`Some trouble with db: ${err}`);
+
+				});
 			
 		}, this.interval);
 
@@ -150,9 +175,14 @@ class Mailer {
 
 	}
 
-	logMail(mail) {
-			
-		console.log(mail);
+	parseMails(mails) {
+
+		mails.forEach((mail) => {
+
+			this.events.emit('message', mail);
+			makeMailReaded({ messageId: mail.messageId });
+
+		});
 
 	}
 

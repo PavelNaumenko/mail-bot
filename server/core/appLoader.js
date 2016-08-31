@@ -25,14 +25,14 @@ export default class App {
 	}
 
 	/**
-	 * Start and listen server
+	 * Connect to database
 	 */
 
 	connectToDB() {
 
-		this.server.mongoose.connect(config[mode].DB_URL, () => {
+		this.server.mongoose.connect(config[mode].DATABASE, (err) => {
 
-			console.log('//        Connected to API db        //');
+			err ? console.log(`Error:  + ${err}`) : console.log('//        Connected to API db        //');
 
 		});
 

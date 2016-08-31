@@ -28,7 +28,7 @@ mailer.init({
 	attachLimit: {
 
 		txt: 1000,
-		jpeg: 20000
+		jpeg: 20000000
 
 	}
 
@@ -36,17 +36,17 @@ mailer.init({
 
 mailer.events.on('message', (mail) => {
 	
-	mailer.logMail(mail);
+	console.log(mail);
 	
 });
 
 let timerId = mailer.start();
 
-setTimeout(() => {
-
-	mailer.stop(timerId);
-
-}, 10000);
+// setTimeout(() => {
+//
+// 	mailer.stop(timerId);
+//
+// }, 10000);
 
 mailer.events.on('error', (err) => {
 

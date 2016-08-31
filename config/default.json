@@ -3,7 +3,7 @@
 	"development": {
 
 		"APP_NAME": "TEST API",
-		"DATABASE" : "mongodb://localhost/clearproject",
+		"DATABASE" : "mongodb://localhost/messageBot",
 		"URL" : "http://127.0.0.1",
 		"PORT" : "8989"
 

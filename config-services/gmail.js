@@ -2,6 +2,7 @@ import config from 'config';
 import nodemailer from 'nodemailer';
 import fetch from 'node-fetch';
 import xoauth2 from 'xoauth2';
+import MailModel from '../server/shemas/mail';
 
 let getToken = () => {
 
@@ -27,7 +28,15 @@ let getToken = () => {
 
 export let getMailList = () => {
 
-	return [{ id: '111' }, { id: '123' }, { id: '323' }];
+	return new Promise((resolve, reject) => {
+
+		MailModel.find({ old: false }, (err, data) => {
+			
+			(err) ? reject(err) : resolve(data);
+
+		});
+
+	});
 
 };
 
@@ -56,6 +65,30 @@ export let createTransport = () => {
 
 		});
 		
+	});
+
+};
+
+export let addMail = (options) => {
+
+	return new Promise((resolve, reject) => {
+
+		MailModel.create(options, (err, data) => {
+
+			(err) ? reject(err) : resolve(data);
+
+		});
+
+	});
+	
+};
+
+export let makeMailReaded = (criteria) => {
+	
+	MailModel.findOneAndUpdate(criteria, { old: true }, (err) => {
+		
+		if (err) console.log(err);
+
 	});
 
 };
