@@ -43,10 +43,12 @@ class Mailer {
 
 	configureMessage(options) {
 
-		(options.attachments) ? options.attachments = this.parseAttachments(options.attachments) : true;
+		let attachments;
+		
+		(options.attachments) ? attachments = this.parseAttachments(options.attachments) : true;
 
 		const mailOptions = {
-			attachments: options.attachments,
+			attachments,
 			from: options.sender || this.sender,
 			to: options.to,
 			subject: options.subject || '',
@@ -123,21 +125,26 @@ class Mailer {
 
 	parseAttachments(attachments) {
 
-		return attachments.map((attach) => {
+		let arr = [];
+
+		attachments.forEach((attach) => {
 
 			switch (attach.type)  {
 
 				case 'text':
 
-					return this.parceTextAttach(attach);
+					arr.push(this.parceTextAttach(attach));
+					break;
 
 				case 'url':
 
-					return this.parceUrlAttach(attach);
+					arr.push(this.parceUrlAttach(attach));
+					break;
 
 				case 'file':
 
-					return this.parceFileAttach(attach);
+					arr.push(this.parceFileAttach(attach));
+					break;
 
 				default:
 
@@ -146,6 +153,8 @@ class Mailer {
 			}
 
 		});
+		
+		return arr;
 
 	}
 
@@ -179,8 +188,12 @@ class Mailer {
 
 		mails.forEach((mail) => {
 
-			this.events.emit('message', mail);
-			makeMailReaded({ messageId: mail.messageId });
+			makeMailReaded({ messageId: mail.messageId })
+				.then((data) => {
+
+					this.events.emit('message', data);
+
+				});
 
 		});
 
@@ -201,7 +214,7 @@ class Mailer {
 
 		};
 
-		d[options.param] += options.value;
+		if (options.value >= 0) d[options.param] += options.value;
 
 		return new Date(d.year, d.month, d.date, d.hours, d.minutes, d.seconds);
 
@@ -210,6 +223,8 @@ class Mailer {
 	isValidAttachments(attachments) {
 
 		return new Promise((resolve, reject) => {
+
+			if (!(attachments)) resolve();
 
 			let arr = [];
 
@@ -269,7 +284,7 @@ class Mailer {
 
 				}
 
-			}, 2);
+			}, 5);
 
 		});
 
@@ -279,7 +294,7 @@ class Mailer {
 
 		let arr = str.split('.');
 
-		return arr[arr.length - 1];
+		if (arr.length !== 1) return arr[arr.length - 1];
 
 	}
 
@@ -290,7 +305,7 @@ class Mailer {
 
 		if (!maxSize) return false;
 		
-		return Buffer.byteLength(attach.attach, 'utf8');
+		return Buffer.byteLength(attach.attach, 'utf8') < maxSize;
 
 	}
 

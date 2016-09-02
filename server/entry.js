@@ -40,7 +40,7 @@ mailer.events.on('message', (mail) => {
 	
 });
 
-let timerId = mailer.start();
+// let timerId = mailer.start();
 
 // setTimeout(() => {
 //
@@ -63,25 +63,26 @@ mailer.events.on('success', () => {
 const subject = 'Test';
 const message = 'some mail';
 
-setTimeout(() => {
-
-	mailer.send(
-		{
-			subject,
-			message,
-			to: ['pnaumenko95@gmail.com'],
-			attachments: [
-				{
-
-					name: 'picture.jpeg',
-					attach: 'https://static.pexels.com/photos/96918/pexels-photo-96918.jpeg',
-					type: 'url'
-
-				}],
-			date: Date.now()
-
-		});
-
-}, 5000);
+// setTimeout(() => {
+//
+// 	mailer.send(
+// 		{
+// 			subject,
+// 			message,
+// 			to: ['pnaumenko95@gmail.com'],
+// 			attachments: [
+// 				{
+//
+// 					name: 'picture.jpeg',
+// 					attach: 'https://static.pexels.com/photos/96918/pexels-photo-96918.jpeg',
+// 					type: 'url'
+//
+// 				}],
+// 			date: Date.now()
+//
+// 		});
+//
+// }, 5000);
 
 app.start();
+

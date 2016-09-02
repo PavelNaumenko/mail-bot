@@ -84,11 +84,15 @@ export let addMail = (options) => {
 };
 
 export let makeMailReaded = (criteria) => {
-	
-	MailModel.findOneAndUpdate(criteria, { old: true }, (err) => {
-		
-		if (err) console.log(err);
+
+	return new Promise((resolve, reject) => {
+
+		MailModel.findOneAndUpdate(criteria, { old: true }, { new: true }, (err, data) => {
+
+			(err) ? reject(err) : resolve(data);
+
+		});
 
 	});
-
+	
 };
