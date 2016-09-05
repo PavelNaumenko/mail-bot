@@ -350,45 +350,34 @@ describe('mailer', () => {
 
 	});
 	
-	describe('#sendMailAfter()', () => {
+	describe('#setSendedData()', () => {
 		
-		it('should return data after 3 minutes', (done) => {
+		it('should return changed data', (done) => {
 
-			let dataNow = new Date;
+			let sendedData = new Date(2016, 8, 7);
 
-			dataNow.setMinutes(dataNow.getMinutes() + 3);
+			const options = {
 
-			let minutes = dataNow.getMinutes();
+				year: sendedData.getFullYear(),
+				month: sendedData.getMonth(),
+				days: sendedData.getDate(),
+				hours: sendedData.getHours(),
+				minutes: sendedData.getMinutes(),
+				seconds: sendedData.getSeconds()
 
-			let dataSend = mailer.sendMailAfter({ param: 'minutes', value: 3 });
+			};
 
-			let minutesSend = dataSend.getMinutes();
-
-			expect(minutesSend).to.be.equal(minutes);
-
-			done();
-
-		});
-
-		it('should not change data when invalid param', (done) => {
-
-			let dataNow = Date.now();
-
-			let dataSend = mailer.sendMailAfter({ param: 'abc', value: 3 });
-
-			expect(+dataSend - dataNow).to.be.below(1000);
+			expect(+mailer.setSendedData(options)).to.be.equal(+sendedData);
 
 			done();
 
 		});
 
-		it('should not change data when invalid value', (done) => {
+		it('should return current data', (done) => {
 
-			let dataNow = Date.now();
+			let data = new Date();
 
-			let dataSend = mailer.sendMailAfter({ param: 'minutes', value: -5 });
-
-			expect(+dataSend - dataNow).to.be.below(1000);
+			expect(+mailer.setSendedData() - data).to.be.below(5);
 
 			done();
 
@@ -655,17 +644,18 @@ describe('mailer', () => {
 
 			});
 
+			mailer.events.on('success', () => {
+
+				done();
+
+			});
+
 			mailer.events.on('error', (err) => {
 
 				done(err);
 
 			});
 
-			mailer.events.on('success', () => {
-
-				done();
-
-			});
 
 		});
 
@@ -673,7 +663,6 @@ describe('mailer', () => {
 
 			mailer.events.removeAllListeners('error');
 			mailer.events.removeAllListeners('success');
-
 
 			mailer.send({
 
@@ -685,15 +674,15 @@ describe('mailer', () => {
 
 			});
 
-			mailer.events.on('error', () => {
-
-				done();
-
-			});
-
 			mailer.events.on('success', () => {
 
 				done('expect that mail not send');
+
+			});
+
+			mailer.events.on('error', () => {
+
+				done();
 
 			});
 
@@ -704,6 +693,10 @@ describe('mailer', () => {
 			mailer.events.removeAllListeners('error');
 			mailer.events.removeAllListeners('success');
 
+			let dateNow = new Date();
+
+			let options = { seconds: dateNow.getSeconds() + 7 };
+
 			let start = now();
 
 			mailer.send({
@@ -712,7 +705,7 @@ describe('mailer', () => {
 				message: 'test',
 				to: ['pnaumenko95@gmail.com'],
 				attachments: null,
-				date: mailer.sendMailAfter({ param: 'seconds', value: 7 })
+				date: mailer.setSendedData(options)
 
 			});
 
@@ -733,6 +726,7 @@ describe('mailer', () => {
 			});
 
 		});
+
 
 	});
 

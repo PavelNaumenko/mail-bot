@@ -199,7 +199,7 @@ class Mailer {
 
 	}
 
-	sendMailAfter(options) {
+	setSendedData(options) {
 
 		const date = new Date();
 
@@ -207,16 +207,20 @@ class Mailer {
 
 			year: date.getFullYear(),
 			month: date.getMonth(),
-			date: date.getDate(),
+			days: date.getDate(),
 			hours: date.getHours(),
 			minutes: date.getMinutes(),
 			seconds: date.getSeconds()
 
 		};
 
-		if (options.value >= 0) d[options.param] += options.value;
+		for (let key in options) {
 
-		return new Date(d.year, d.month, d.date, d.hours, d.minutes, d.seconds);
+			d[key] = options[key];
+
+		}
+
+		return new Date(d.year, d.month, d.days, d.hours, d.minutes, d.seconds);
 
 	}
 
