@@ -719,7 +719,7 @@ describe('mailer', () => {
 
 				let finish = now();
 
-				expect(finish - start).to.be.within(6000, 8000);
+				expect(finish - start).to.be.within(6000, 8500);
 
 				done();
 

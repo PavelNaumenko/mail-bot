@@ -93,7 +93,7 @@ Possible options values:
   Add your count to type that you want to set.
 
 ```
-date: mailer.sendMailAfter({ param: 'seconds', value: 7 });
+date: mailer.setSendedData({ seconds: dateNow.getSeconds() + 7 })
 ```
 
 Possible param values:

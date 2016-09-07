@@ -11,33 +11,53 @@ class Mailer {
 	events: Object;
 	attachLimit: Object;
 
-	init(options) {
+	init(options: Object) {
 
 		this.sender = options.sender;
 		this.interval = options.interval;
 		this.events = new EventEmitter;
 		this.attachLimit = options.attachLimit;
 
-		switch (options.driver) {
+		this.setDriver(options.driver)
+			.then((emailTransporter) => {
+				
+				this.emailTransporter = emailTransporter;
+				
+			})
+			.catch((err) => {
 
-			case 'gmail':
-				createTransport()
-					.then((emailTransporter) => {
+				console.log(err);
+				
+			});
 
-						this.emailTransporter = emailTransporter;
+	}
 
-					})
-					.catch((err) => {
+	setDriver(driver: string) {
 
-						console.log(err);
+		return new Promise((resolve, reject) => {
 
-					});
-				break;
+			switch (driver) {
 
-			default:
-				console.log('Incorrect driver!');
+				case 'gmail':
+					createTransport()
+						.then((emailTransporter) => {
 
-		}
+							resolve(emailTransporter);
+
+						})
+						.catch((err) => {
+
+							reject(err);
+
+						});
+					break;
+
+				default:
+					reject('Incorrect driver!');
+
+			}
+			
+		});
 
 	}
 
